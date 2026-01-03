@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code, Linkedin, Instagram, Mail, Smartphone, ExternalLink, Menu, X, XCircle, MapPin, Truck, Database, Globe } from 'lucide-react';
+// IMPORTANTE: Importando a imagem que está na pasta src
+import rafaelFoto from './rafael.jpg';
 
 // --- Dados Globais ---
 const PHONE_NUMBER = "5527995893556";
@@ -250,14 +252,15 @@ const Portfolio = () => {
 
           {/* FOTO DESKTOP (Agora com Hover Colorido) */}
           <motion.div style={{ y: yParallax }} className="order-1 md:order-2 relative w-[300px] md:w-[450px] h-[450px] md:h-[550px] mb-10 md:mb-0 z-0 hidden md:block">
-              <div className="relative w-full h-full cursor-pointer group"> {/* Group permite controlar o filho */}
+              <div className="relative w-full h-full cursor-pointer group">
                 <div className="absolute -top-10 -right-10 w-20 h-20 border-t-4 border-r-4 border-[#ccff00] opacity-50"></div>
                 <div className="absolute -bottom-5 -left-5 w-full h-full border border-white/20 rounded-tl-[100px]"></div>
                 
                 <div className="w-full h-full overflow-hidden rounded-tl-[100px] bg-zinc-800 relative">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 opacity-60 group-hover:opacity-0 transition-opacity duration-700"></div>
+                  {/* USO DA FOTO IMPORTADA: rafaelFoto */}
                   <img 
-                    src="/portifolio/rafael.jpg" 
+                    src={rafaelFoto} 
                     alt="Rafael Padilha" 
                     className="object-cover w-full h-full opacity-90 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-in-out" 
                   />
@@ -276,8 +279,9 @@ const Portfolio = () => {
           className="md:hidden relative w-full h-[400px] mt-12 rounded-t-[50px] overflow-hidden order-3"
         >
              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10"></div>
+             {/* USO DA FOTO IMPORTADA: rafaelFoto */}
              <motion.img 
-               src="/portifolio/rafael.jpg"
+               src={rafaelFoto}
                alt="Rafael Padilha" 
                className="object-cover w-full h-full"
                initial={{ filter: 'grayscale(100%)', opacity: 0.8 }}
@@ -398,8 +402,7 @@ const Portfolio = () => {
         </div>
       </Section>
 
-      {/* --- CONTATO (LAYOUT FIXADO PARA NÃO CORTAR) --- */}
-      {/* Removemos min-h-screen e absolute. Agora é flex-col normal para crescer com o conteúdo */}
+      {/* --- CONTATO --- */}
       <section id="contact" className="relative z-10 bg-gradient-to-b from-[#0a0a0a] to-[#111] border-t border-white/5 pt-20 flex flex-col justify-between min-h-[80vh]">
         <div className="w-full max-w-4xl mx-auto text-center px-6 flex-grow flex flex-col justify-center">
           <motion.div initial={{ scale: 0.9, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }}>
@@ -422,7 +425,6 @@ const Portfolio = () => {
           </div>
         </div>
 
-        {/* Footer agora é parte do fluxo normal, não absolute */}
         <div className="w-full p-8 border-t border-white/5 bg-black mt-auto">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-end gap-6">
             <div className="text-center md:text-left">
