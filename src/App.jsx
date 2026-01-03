@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code, Linkedin, Instagram, Mail, Smartphone, ExternalLink, Menu, X, XCircle, MapPin, Truck, Database, Globe } from 'lucide-react';
-// IMPORTANTE: Importando a imagem que está na pasta src
+// Importação da imagem
 import rafaelFoto from './rafael.jpg';
 
 // --- Dados Globais ---
@@ -48,11 +48,12 @@ const Section = ({ children, className, id }) => (
   </section>
 );
 
+// Título animado (Scroll Trigger)
 const AnimatedTitle = ({ children, className }) => (
   <motion.h2 
     initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
+    viewport={{ once: true, margin: "-100px" }}
     transition={{ duration: 0.8, ease: "easeOut" }}
     className={`font-bold text-5xl md:text-7xl tracking-tighter ${className}`}
   >
@@ -132,7 +133,7 @@ const Portfolio = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   
-  // Mouse Spotlight Logic
+  // Mouse Spotlight Logic (Desktop)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -143,6 +144,21 @@ const Portfolio = () => {
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  // Variantes para animação em cascata do Menu Mobile
+  const menuVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { 
+      opacity: 1, y: 0,
+      transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    },
+    exit: { opacity: 0, y: -20 }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: { opacity: 1, x: 0 }
+  };
 
   return (
     <div className="bg-[#050505] text-white font-sans selection:bg-[#ccff00] selection:text-black relative overflow-x-hidden">
@@ -208,15 +224,30 @@ const Portfolio = () => {
           </button>
         </div>
 
+        {/* Menu Mobile com Animação em Cascata */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3, ease: "easeInOut" }} className="absolute top-full left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl p-6 flex flex-col items-center gap-6 md:hidden z-40">
-              <NavLink href="#hero" onClick={toggleMenu}>Home</NavLink>
-              <NavLink href="#about" onClick={toggleMenu}>Sobre</NavLink>
-              <NavLink href="#projects" onClick={toggleMenu}>Projetos</NavLink>
-              <NavLink href="#contact" onClick={toggleMenu}>Contato</NavLink>
-              <div className="w-full h-[1px] bg-white/10 my-2"></div>
-              <a href={WHATSAPP_LINK} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#ccff00] font-bold text-lg"><Smartphone size={20}/>WhatsApp</a>
+            <motion.div 
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={menuVariants}
+              className="absolute top-full left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl p-6 flex flex-col items-center gap-6 md:hidden z-40"
+            >
+              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#hero" onClick={toggleMenu}>Home</NavLink></motion.div>
+              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#about" onClick={toggleMenu}>Sobre</NavLink></motion.div>
+              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#projects" onClick={toggleMenu}>Projetos</NavLink></motion.div>
+              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#contact" onClick={toggleMenu}>Contato</NavLink></motion.div>
+              <motion.div variants={itemVariants} className="w-full h-[1px] bg-white/10 my-2"></motion.div>
+              <motion.a 
+                variants={itemVariants}
+                href={WHATSAPP_LINK} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="flex items-center gap-2 text-[#ccff00] font-bold text-lg"
+              >
+                <Smartphone size={20}/>WhatsApp
+              </motion.a>
             </motion.div>
           )}
         </AnimatePresence>
@@ -250,20 +281,14 @@ const Portfolio = () => {
             </motion.div>
           </div>
 
-          {/* FOTO DESKTOP (Agora com Hover Colorido) */}
+          {/* FOTO DESKTOP */}
           <motion.div style={{ y: yParallax }} className="order-1 md:order-2 relative w-[300px] md:w-[450px] h-[450px] md:h-[550px] mb-10 md:mb-0 z-0 hidden md:block">
               <div className="relative w-full h-full cursor-pointer group">
                 <div className="absolute -top-10 -right-10 w-20 h-20 border-t-4 border-r-4 border-[#ccff00] opacity-50"></div>
                 <div className="absolute -bottom-5 -left-5 w-full h-full border border-white/20 rounded-tl-[100px]"></div>
-                
                 <div className="w-full h-full overflow-hidden rounded-tl-[100px] bg-zinc-800 relative">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 opacity-60 group-hover:opacity-0 transition-opacity duration-700"></div>
-                  {/* USO DA FOTO IMPORTADA: rafaelFoto */}
-                  <img 
-                    src={rafaelFoto} 
-                    alt="Rafael Padilha" 
-                    className="object-cover w-full h-full opacity-90 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-in-out" 
-                  />
+                  <img src={rafaelFoto} alt="Rafael Padilha" className="object-cover w-full h-full opacity-90 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-in-out" />
                 </div>
               </div>
           </motion.div>
@@ -279,7 +304,6 @@ const Portfolio = () => {
           className="md:hidden relative w-full h-[400px] mt-12 rounded-t-[50px] overflow-hidden order-3"
         >
              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10"></div>
-             {/* USO DA FOTO IMPORTADA: rafaelFoto */}
              <motion.img 
                src={rafaelFoto}
                alt="Rafael Padilha" 
@@ -308,27 +332,44 @@ const Portfolio = () => {
             </p>
             
             <div className="grid grid-cols-2 gap-6 mt-10">
-              <div className="bg-white/5 p-6 rounded-xl border border-white/10 hover:border-[#ccff00] transition-colors">
+              <motion.div 
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="bg-white/5 p-6 rounded-xl border border-white/10 hover:border-[#ccff00] transition-colors"
+              >
                 <Code className="mb-2 text-[#ccff00]"/>
                 <h3 className="font-bold">Frontend</h3>
                 <p className="text-sm text-gray-500">React, Vite, Tailwind</p>
-              </div>
-              <div className="bg-white/5 p-6 rounded-xl border border-white/10 hover:border-[#ccff00] transition-colors">
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="bg-white/5 p-6 rounded-xl border border-white/10 hover:border-[#ccff00] transition-colors"
+              >
                 <Globe className="mb-2 text-[#ccff00]"/>
                 <h3 className="font-bold">Backend</h3>
                 <p className="text-sm text-gray-500">Integração API, SAP, SQL</p>
-              </div>
+              </motion.div>
             </div>
           </div>
           
           <div className="md:w-1/2 flex justify-center md:justify-end w-full">
-             <div className="w-full max-w-md bg-black border border-white/10 p-10 rounded-3xl shadow-2xl relative overflow-hidden group">
+             <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="w-full max-w-md bg-black border border-white/10 p-10 rounded-3xl shadow-2xl relative overflow-hidden group"
+             >
                <div className="absolute top-0 right-0 w-40 h-40 bg-[#ccff00] rounded-full blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
                <span className="block text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600">2026</span>
                <p className="text-lg text-gray-300">
                  Pronto para transformar requisitos complexos em experiências digitais fluidas.
                </p>
-             </div>
+             </motion.div>
           </div>
         </div>
       </Section>
@@ -343,10 +384,21 @@ const Portfolio = () => {
 
           <div className="flex flex-col gap-24">
             {projectsData.map((project, index) => (
-              <motion.div key={project.id} initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className={`group relative grid md:grid-cols-12 gap-8 items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+              <motion.div 
+                key={project.id} 
+                initial={{ opacity: 0, y: 50 }} 
+                whileInView={{ opacity: 1, y: 0 }} 
+                viewport={{ once: true, margin: "-50px" }} // Animação começa um pouco antes
+                transition={{ duration: 0.6 }} 
+                className={`group relative grid md:grid-cols-12 gap-8 items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
+              >
                 
                 {/* CARD VISUAL */}
-                <div onClick={() => setSelectedProject(project)} className={`md:col-span-7 relative h-[400px] rounded-2xl overflow-hidden cursor-pointer shadow-2xl border border-white/10 bg-[#0f0f0f] ${index % 2 === 1 ? 'md:order-2' : 'md:order-1'}`}>
+                <motion.div 
+                   onClick={() => setSelectedProject(project)} 
+                   whileTap={{ scale: 0.98 }} // Efeito de clique no Mobile
+                   className={`md:col-span-7 relative h-[400px] rounded-2xl overflow-hidden cursor-pointer shadow-2xl border border-white/10 bg-[#0f0f0f] ${index % 2 === 1 ? 'md:order-2' : 'md:order-1'}`}
+                >
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/0 transition-colors z-20"></div>
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/60 backdrop-blur-sm">
                     <span className="bg-[#ccff00] text-black px-6 py-3 rounded-full font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-[0_0_20px_#ccff00]">Ver Detalhes <ExternalLink size={18}/></span>
@@ -374,7 +426,7 @@ const Portfolio = () => {
                   ) : (
                     <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
                   )}
-                </div>
+                </motion.div>
 
                 {/* TEXTO */}
                 <div className={`md:col-span-5 flex flex-col justify-center ${index % 2 === 1 ? 'md:order-1' : 'md:order-2'}`}>
@@ -416,12 +468,20 @@ const Portfolio = () => {
           </motion.div>
           
           <div className="flex flex-col md:flex-row justify-center gap-6 mb-20">
-            <a href={WHATSAPP_LINK} target="_blank" rel="noreferrer" className="bg-[#ccff00] text-black px-10 py-5 rounded-full text-lg font-bold hover:scale-105 hover:shadow-[0_0_40px_rgba(204,255,0,0.4)] transition-all flex items-center justify-center gap-2">
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href={WHATSAPP_LINK} target="_blank" rel="noreferrer" className="bg-[#ccff00] text-black px-10 py-5 rounded-full text-lg font-bold shadow-[0_0_20px_rgba(204,255,0,0.3)] flex items-center justify-center gap-2"
+            >
               <Smartphone size={24}/> Chamar no WhatsApp
-            </a>
-            <a href="mailto:padilharafael17@gmail.com" className="border border-white/20 bg-white/5 text-white px-10 py-5 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2">
+            </motion.a>
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="mailto:padilharafael17@gmail.com" className="border border-white/20 bg-white/5 text-white px-10 py-5 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2"
+            >
               <Mail size={24}/> Enviar E-mail
-            </a>
+            </motion.a>
           </div>
         </div>
 
@@ -442,4 +502,4 @@ const Portfolio = () => {
   );
 };
 
-export default Portfolio;
+export default Portfolio;git add .
