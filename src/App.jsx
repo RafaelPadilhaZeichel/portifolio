@@ -257,7 +257,7 @@ const Portfolio = () => {
                 <div className="w-full h-full overflow-hidden rounded-tl-[100px] bg-zinc-800 relative">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 opacity-60 group-hover:opacity-0 transition-opacity duration-700"></div>
                   <img 
-                    src="rafael.jpg" 
+                    src="/portifolio/rafael.jpg" 
                     alt="Rafael Padilha" 
                     className="object-cover w-full h-full opacity-90 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-in-out" 
                   />
@@ -277,7 +277,7 @@ const Portfolio = () => {
         >
              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10"></div>
              <motion.img 
-               src="rafael.jpg" 
+               src="/portifolio/rafael.jpg"
                alt="Rafael Padilha" 
                className="object-cover w-full h-full"
                initial={{ filter: 'grayscale(100%)', opacity: 0.8 }}
