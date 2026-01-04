@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Code, Linkedin, Instagram, Mail, Smartphone, ExternalLink, Menu, X, XCircle, MapPin, Truck, Database, Globe, FileText, Server, Layers, Cpu, GitBranch, LayoutTemplate } from 'lucide-react';
+import { ArrowRight, ArrowUp, Code, Linkedin, Instagram, Mail, Smartphone, ExternalLink, Menu, X, XCircle, MapPin, Truck, Database, Globe, FileText, Server, Layers, Cpu, GitBranch, LayoutTemplate } from 'lucide-react';
 
 // --- IMPORTAÇÕES DE MÍDIA ---
 import rafaelFoto from './rafael.jpg';
+// Certifique-se que o arquivo curriculo.pdf está na pasta src
 import curriculoPdf from './curriculo.pdf'; 
 
 // --- Dados Globais ---
@@ -120,6 +121,7 @@ const Portfolio = () => {
   const yParallax = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   
   // Mouse Spotlight Logic
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -131,16 +133,30 @@ const Portfolio = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // --- LÓGICA DE SCROLL SUAVE (CORRIGIDA) ---
+  // Lógica do Botão Voltar ao Topo
+  useEffect(() => {
+    const handleScrollVis = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+    window.addEventListener('scroll', handleScrollVis);
+    return () => window.removeEventListener('scroll', handleScrollVis);
+  }, []);
+
+  // --- LÓGICA DE SCROLL SUAVE (JavaScript) ---
+  // Isso resolve o problema de "teleporte" e funciona em todos os navegadores
   const handleScroll = (e, href) => {
     e.preventDefault();
-    setIsMenuOpen(false); // Fecha o menu mobile se estiver aberto
+    setIsMenuOpen(false); // Fecha o menu mobile
 
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
     
     if (element) {
-      const headerOffset = 80; // Altura do seu Header fixo
+      const headerOffset = 80; // Altura do header para não cortar o título
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
@@ -163,7 +179,7 @@ const Portfolio = () => {
   };
   const itemVariants = { hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } };
 
-  // Componente de Link Interno que usa a nova lógica de scroll
+  // Componente de Link Interno com Scroll JS
   const NavLink = ({ href, children }) => (
     <a 
       href={href}
@@ -263,9 +279,9 @@ const Portfolio = () => {
             </motion.p>
 
             <motion.div className="mt-12 flex flex-wrap gap-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
-              {/* Botão com Scroll Suave corrigido */}
+              {/* Botão Ver Projetos usando Scroll JS */}
               <button 
-                onClick={(e) => handleScroll(e, '#projects')} 
+                onClick={(e) => handleScroll(e, '#projects')}
                 className="bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-[#ccff00] transition-colors shadow-[0_0_30px_rgba(255,255,255,0.2)]"
               >
                 Ver Projetos <ArrowRight size={20}/>
@@ -419,6 +435,21 @@ const Portfolio = () => {
           </div>
         </div>
       </section>
+
+      {/* --- BOTÃO VOLTAR AO TOPO (NOVO) --- */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            onClick={(e) => handleScroll(e, '#hero')}
+            className="fixed bottom-8 right-8 z-50 bg-[#ccff00] text-black p-3 rounded-full shadow-[0_0_20px_rgba(204,255,0,0.4)] hover:scale-110 transition-transform"
+          >
+            <ArrowUp size={24} strokeWidth={3} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
