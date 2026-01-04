@@ -205,16 +205,14 @@ Error generating stack: `+i.message+`
         /* --- CORREÇÃO DO LAYOUT EM MODO PAISAGEM (LANDSCAPE) --- */
         @media only screen and (max-height: 500px) and (orientation: landscape) {
           #hero {
-            padding-top: 60px !important; /* Reduz um pouco o padding superior */
+            padding-top: 40px !important;
             justify-content: flex-start !important;
-            height: auto !important; /* Garante que a seção se adapte ao conteúdo */
-            min-height: 100vh; /* Ocupa pelo menos toda a altura da tela */
           }
           
-          /* Reduz drásticamente o título para caber na altura pequena */
+          /* Reduz o título para caber */
           #hero h1 { 
-            font-size: 8vh !important; /* Fonte ainda menor para garantir espaço */
-            line-height: 1 !important; 
+            font-size: 10vh !important; 
+            line-height: 0.9 !important; 
             margin-bottom: 5px !important;
           }
 
@@ -223,11 +221,10 @@ Error generating stack: `+i.message+`
             font-size: 12px !important; 
             margin-top: 5px !important;
             margin-bottom: 10px !important;
-            border-left-width: 2px !important; /* Borda mais fina */
             padding-left: 10px !important;
           }
 
-          /* Ajusta os botões para serem menores e com menos espaçamento */
+          /* Ajusta os botões */
           #hero button, #hero a {
             padding: 6px 12px !important;
             font-size: 10px !important;
@@ -235,32 +232,27 @@ Error generating stack: `+i.message+`
           
           #hero .mt-12 {
             margin-top: 10px !important;
-            gap: 8px !important; /* Menos espaço entre botões */
+            gap: 8px !important;
           }
 
-          /* CORREÇÃO DA IMAGEM E CONTAINER */
-          /* O container da imagem não deve ter altura fixa, deve se adaptar */
-          #hero > div { /* Seleciona o container principal flex */
-            align-items: flex-start !important; /* Alinha tudo ao topo */
+          /* --- FIX DA IMAGEM --- */
+          /* Aqui estamos selecionando o container da imagem (order-3 no mobile) */
+          #hero .order-3 {
+            height: 180px !important; /* Altura fixa pequena */
+            width: 180px !important;  /* Largura fixa igual para formar um quadrado */
+            margin-left: auto !important; /* Centraliza horizontalmente */
+            margin-right: auto !important;
+            margin-top: 5px !important;
+            border-radius: 20px !important; /* Arredondamento menor para combinar com o tamanho */
+            flex-shrink: 0;
           }
 
-          /* O container específico da imagem */
-          #hero .order-1.md\\:order-2 { 
-              height: auto !important; /* Permite que a altura se ajuste */
-              max-height: 80vh !important; /* Limita a altura máxima */
-              width: auto !important;
-              flex-shrink: 0; /* Impede que a imagem seja "esmagada" */
-          }
-
-          /* A imagem em si - O FIX PRINCIPAL */
+          /* Garante que a imagem preencha esse quadrado (estilo original) */
           #hero img {
-            height: auto !important;
-            width: auto !important;
-            max-height: 100% !important; /* Garante que não ultrapasse o container */
-            object-fit: contain !important; /* Garante que a imagem inteira seja visível SEM CORTES */
+            object-fit: cover !important; 
           }
           
-          /* Esconde os elementos decorativos para limpar o visual e ganhar espaço */
+          /* Esconde elementos decorativos desnecessários na tela pequena */
           #hero .animate-pulse, 
           #hero .text-\\[\\#ccff00\\].font-mono.text-sm.tracking-widest.uppercase {
             display: none !important;
