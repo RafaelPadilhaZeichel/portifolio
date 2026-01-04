@@ -40,3 +40,21 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Esta regra aplica-se a telemóveis deitados (altura pequena) */
+@media only screen and (max-height: 500px) and (orientation: landscape) {
+  
+  /* Substitua 'h1' ou '.seu-titulo' pela classe usada no 'RAFAEL PADILHA' */
+  h1, .titulo-hero {
+    /* Reduz a fonte para um tamanho que caiba, ou usa 'vh' para escalar com a altura */
+    font-size: 10vh !important; 
+    /* Ou tente um valor fixo em pixels se preferir: font-size: 32px; */
+    
+    line-height: 1.1; /* Aproxima um pouco as linhas se necessário */
+  }
+
+  /* Opcional: Ajustar o subtítulo (SAP ABAP...) também */
+  p, .subtitulo {
+    font-size: 14px;
+  }
+}
