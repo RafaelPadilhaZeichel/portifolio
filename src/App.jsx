@@ -4,7 +4,6 @@ import { ArrowRight, Code, Linkedin, Instagram, Mail, Smartphone, ExternalLink, 
 
 // --- IMPORTAÇÕES DE MÍDIA ---
 import rafaelFoto from './rafael.jpg';
-// IMPORTANTE: O arquivo curriculo.pdf deve estar dentro da pasta src
 import curriculoPdf from './curriculo.pdf'; 
 
 // --- Dados Globais ---
@@ -75,18 +74,6 @@ const AnimatedTitle = ({ children, className }) => (
   </motion.h2>
 );
 
-// Link de Navegação Simplificado
-const NavLink = ({ href, children, onClick }) => (
-  <a 
-    href={href}
-    onClick={() => onClick && onClick()}
-    className="text-sm font-bold uppercase tracking-widest hover:text-[#ccff00] transition-colors relative group cursor-pointer block w-full md:w-auto text-center md:text-left py-2 md:py-0"
-  >
-    {children}
-    <span className="hidden md:block absolute -bottom-1 left-0 w-0 h-[2px] bg-[#ccff00] group-hover:w-full transition-all duration-300"></span>
-  </a>
-);
-
 // Modal
 const ProjectModal = ({ project, onClose }) => {
   if (!project) return null;
@@ -134,7 +121,7 @@ const Portfolio = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   
-  // Mouse Spotlight Logic (Desktop)
+  // Mouse Spotlight Logic
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -144,9 +131,28 @@ const Portfolio = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  // --- LÓGICA DE SCROLL SUAVE (CORRIGIDA) ---
+  const handleScroll = (e, href) => {
+    e.preventDefault();
+    setIsMenuOpen(false); // Fecha o menu mobile se estiver aberto
+
+    const targetId = href.replace('#', '');
+    const element = document.getElementById(targetId);
+    
+    if (element) {
+      const headerOffset = 80; // Altura do seu Header fixo
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  // Variantes
   const menuVariants = {
     hidden: { opacity: 0, y: -20 },
     visible: { 
@@ -157,36 +163,30 @@ const Portfolio = () => {
   };
   const itemVariants = { hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } };
 
+  // Componente de Link Interno que usa a nova lógica de scroll
+  const NavLink = ({ href, children }) => (
+    <a 
+      href={href}
+      onClick={(e) => handleScroll(e, href)}
+      className="text-sm font-bold uppercase tracking-widest hover:text-[#ccff00] transition-colors relative group cursor-pointer block w-full md:w-auto text-center md:text-left py-2 md:py-0"
+    >
+      {children}
+      <span className="hidden md:block absolute -bottom-1 left-0 w-0 h-[2px] bg-[#ccff00] group-hover:w-full transition-all duration-300"></span>
+    </a>
+  );
+
   return (
     <div className="bg-[#050505] text-white font-sans selection:bg-[#ccff00] selection:text-black relative overflow-x-hidden">
       
-      {/* --- CSS NATIVO PARA SCROLL SUAVE --- */}
+      {/* Estilos Globais */}
       <style>{`
-        html { 
-          scroll-behavior: smooth; 
-          scroll-padding-top: 100px; /* Compensa a altura do menu fixo */
-        }
         .custom-scrollbar::-webkit-scrollbar { width: 8px; }
         .custom-scrollbar::-webkit-scrollbar-track { bg: #111; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #ccff00; }
-        
-        /* Animação do Gradiente */
-        @keyframes gradient-move {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradient {
-          background-size: 200% auto;
-          animation: gradient-move 5s ease infinite;
-        }
-
-        /* Máscara de Degradê para o Marquee */
-        .marquee-mask {
-          mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-          -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        }
+        .animate-gradient { background-size: 200% auto; animation: gradient-move 5s ease infinite; }
+        @keyframes gradient-move { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .marquee-mask { mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
       `}</style>
 
       {/* Barra de Progresso */}
@@ -207,7 +207,7 @@ const Portfolio = () => {
       {/* Navbar Premium */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-6 md:px-12 backdrop-blur-md bg-black/60 border-b border-white/5 transition-all">
         <div className="flex justify-between items-center relative">
-          <a href="#hero" className="text-2xl font-black tracking-widest border-2 border-white px-2 hover:bg-white hover:text-black transition-all">RPZ.</a>
+          <a href="#hero" onClick={(e) => handleScroll(e, '#hero')} className="text-2xl font-black tracking-widest border-2 border-white px-2 hover:bg-white hover:text-black transition-all">RPZ.</a>
           
           <div className="hidden md:flex gap-8 items-center">
             <NavLink href="#hero">Home</NavLink>
@@ -230,10 +230,10 @@ const Portfolio = () => {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div initial="hidden" animate="visible" exit="exit" variants={menuVariants} className="absolute top-full left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl p-6 flex flex-col items-center gap-6 md:hidden z-40">
-              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#hero" onClick={toggleMenu}>Home</NavLink></motion.div>
-              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#about" onClick={toggleMenu}>Sobre</NavLink></motion.div>
-              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#projects" onClick={toggleMenu}>Projetos</NavLink></motion.div>
-              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#contact" onClick={toggleMenu}>Contato</NavLink></motion.div>
+              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#hero">Home</NavLink></motion.div>
+              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#about">Sobre</NavLink></motion.div>
+              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#projects">Projetos</NavLink></motion.div>
+              <motion.div variants={itemVariants} className="w-full text-center"><NavLink href="#contact">Contato</NavLink></motion.div>
               <motion.div variants={itemVariants} className="w-full h-[1px] bg-white/10 my-2"></motion.div>
               <motion.a variants={itemVariants} href={WHATSAPP_LINK} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#ccff00] font-bold text-lg">
                 <Smartphone size={20}/>WhatsApp
@@ -263,9 +263,15 @@ const Portfolio = () => {
             </motion.p>
 
             <motion.div className="mt-12 flex flex-wrap gap-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
-              <a href="#projects" className="bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-[#ccff00] transition-colors shadow-[0_0_30px_rgba(255,255,255,0.2)]">Ver Projetos <ArrowRight size={20}/></a>
+              {/* Botão com Scroll Suave corrigido */}
+              <button 
+                onClick={(e) => handleScroll(e, '#projects')} 
+                className="bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-[#ccff00] transition-colors shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+              >
+                Ver Projetos <ArrowRight size={20}/>
+              </button>
+              
               <a href={WHATSAPP_LINK} target="_blank" className="border border-white/30 backdrop-blur-sm px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors flex items-center gap-2"><Smartphone size={20}/> WhatsApp</a>
-              {/* LINK DO CURRICULO ATUALIZADO */}
               <a href={curriculoPdf} download="Rafael_Padilha_CV.pdf" className="border border-[#ccff00]/50 text-[#ccff00] px-8 py-4 rounded-full font-bold hover:bg-[#ccff00] hover:text-black transition-colors flex items-center gap-2"><FileText size={20}/> Baixar CV</a>
             </motion.div>
           </div>
@@ -282,6 +288,7 @@ const Portfolio = () => {
           </motion.div>
         </div>
         
+        {/* FOTO MOBILE com Animação Suave */}
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8 }} className="md:hidden relative w-full h-[400px] mt-12 rounded-t-[50px] overflow-hidden order-3">
              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10"></div>
              <motion.img src={rafaelFoto} alt="Rafael Padilha" className="object-cover w-full h-full" initial={{ filter: 'grayscale(100%)', opacity: 0.8 }} whileInView={{ filter: 'grayscale(0%)', opacity: 1 }} transition={{ duration: 1.5, ease: "easeInOut" }} viewport={{ once: true, amount: 0.3 }}/>
@@ -292,10 +299,9 @@ const Portfolio = () => {
       <div className="py-12 border-y border-white/5 bg-black/50 overflow-hidden relative z-10 marquee-mask">
         <motion.div 
           className="flex gap-8 whitespace-nowrap min-w-full"
-          animate={{ x: ["0%", "-50%"] }} // Movimento infinito
+          animate={{ x: ["0%", "-50%"] }} 
           transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
         >
-          {/* Repetindo 4x para loop perfeito */}
           {[...Array(4)].map((_, i) => (
             <React.Fragment key={i}>
               {techStack.map((tech, index) => (
