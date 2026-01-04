@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code, Linkedin, Instagram, Mail, Smartphone, ExternalLink, Menu, X, XCircle, MapPin, Truck, Database, Globe, FileText, Server, Layers, Cpu, GitBranch, LayoutTemplate } from 'lucide-react';
+
+// --- IMPORTAÇÕES DE MÍDIA ---
 import rafaelFoto from './rafael.jpg';
+// IMPORTANTE: O arquivo curriculo.pdf deve estar dentro da pasta src
+import curriculoPdf from './curriculo.pdf'; 
 
 // --- Dados Globais ---
 const PHONE_NUMBER = "5527995893556";
@@ -71,7 +75,7 @@ const AnimatedTitle = ({ children, className }) => (
   </motion.h2>
 );
 
-// Link de Navegação Simplificado (Usa CSS nativo para scroll)
+// Link de Navegação Simplificado
 const NavLink = ({ href, children, onClick }) => (
   <a 
     href={href}
@@ -261,7 +265,8 @@ const Portfolio = () => {
             <motion.div className="mt-12 flex flex-wrap gap-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
               <a href="#projects" className="bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-[#ccff00] transition-colors shadow-[0_0_30px_rgba(255,255,255,0.2)]">Ver Projetos <ArrowRight size={20}/></a>
               <a href={WHATSAPP_LINK} target="_blank" className="border border-white/30 backdrop-blur-sm px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors flex items-center gap-2"><Smartphone size={20}/> WhatsApp</a>
-              <a href="/portifolio/curriculo.pdf" download="Rafael_Padilha_CV.pdf" className="border border-[#ccff00]/50 text-[#ccff00] px-8 py-4 rounded-full font-bold hover:bg-[#ccff00] hover:text-black transition-colors flex items-center gap-2"><FileText size={20}/> Baixar CV</a>
+              {/* LINK DO CURRICULO ATUALIZADO */}
+              <a href={curriculoPdf} download="Rafael_Padilha_CV.pdf" className="border border-[#ccff00]/50 text-[#ccff00] px-8 py-4 rounded-full font-bold hover:bg-[#ccff00] hover:text-black transition-colors flex items-center gap-2"><FileText size={20}/> Baixar CV</a>
             </motion.div>
           </div>
 
@@ -283,7 +288,7 @@ const Portfolio = () => {
         </motion.div>
       </Section>
 
-      {/* --- TECH MARQUEE (MELHORADO COM FADE E CARDS) --- */}
+      {/* --- TECH MARQUEE --- */}
       <div className="py-12 border-y border-white/5 bg-black/50 overflow-hidden relative z-10 marquee-mask">
         <motion.div 
           className="flex gap-8 whitespace-nowrap min-w-full"
