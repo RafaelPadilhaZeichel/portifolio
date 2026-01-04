@@ -205,9 +205,11 @@ Error generating stack: `+i.message+`
         /* --- CORREÇÃO DO LAYOUT EM MODO PAISAGEM (LANDSCAPE) --- */
         @media only screen and (max-height: 500px) and (orientation: landscape) {
           #hero {
-            padding-top: 70px !important; /* AUMENTADO PARA O NOME NÃO CORTAR */
+            padding-top: 85px !important; /* AUMENTADO PARA O NOME NÃO CORTAR NO TOPO */
             justify-content: center !important; 
-            align-items: center !important;
+            align-items: flex-start !important; /* Alinha no topo para dar espaço */
+            height: auto !important; /* Deixa crescer se precisar */
+            min-height: 100vh;
           }
           
           /* LAYOUT LADO A LADO PARA O HERO - FORÇADO */
@@ -218,12 +220,11 @@ Error generating stack: `+i.message+`
              justify-content: space-between !important;
              align-items: center !important;
              width: 100% !important;
-             height: 100% !important;
           }
 
           /* ÁREA DE TEXTO (Esquerda) */
           #hero-text-content {
-            width: 50% !important;
+            width: 55% !important; /* Um pouco mais de espaço para o texto */
             margin-bottom: 0 !important;
             text-align: left !important;
             order: 1 !important; 
@@ -232,14 +233,14 @@ Error generating stack: `+i.message+`
           
           /* Reduz o título para caber */
           #hero h1 { 
-            font-size: 10vh !important; 
+            font-size: 9vh !important; /* Levemente menor */
             line-height: 0.9 !important; 
             margin-bottom: 5px !important;
           }
 
           /* Texto descritivo */
           #hero p { 
-            font-size: 12px !important; 
+            font-size: 11px !important; 
             margin-top: 5px !important;
             margin-bottom: 10px !important;
             padding-left: 10px !important;
@@ -248,20 +249,21 @@ Error generating stack: `+i.message+`
             white-space: normal !important;
           }
 
-          /* Ajusta os botões */
+          /* Ajusta os botões para serem MENORES e caberem lado a lado */
           #hero button, #hero a {
-            padding: 6px 12px !important;
-            font-size: 10px !important;
+            padding: 5px 10px !important; /* Padding reduzido */
+            font-size: 9px !important; /* Fonte reduzida */
+            white-space: nowrap !important; /* Impede quebra de texto dentro do botão */
           }
           
           /* --- FIX DOS BOTÕES: ALINHADOS LATERALMENTE --- */
           #hero .mt-12 {
             display: flex !important;
             flex-direction: row !important; /* FORÇADO HORIZONTAL */
-            flex-wrap: wrap !important; /* Permite quebrar linha se não couber */
+            flex-wrap: wrap !important; /* Permite quebrar linha se realmente não couber */
             align-items: center !important; 
-            margin-top: 10px !important;
-            gap: 8px !important;
+            margin-top: 8px !important;
+            gap: 6px !important; /* Gap menor */
           }
 
           /* --- BUGFIX PRINCIPAL: IMAGEM --- */
@@ -274,10 +276,10 @@ Error generating stack: `+i.message+`
           /* 2. MOSTRAR A IMAGEM MOBILE NA DIREITA E GRANDE */
           #mobile-image {
             display: block !important;
-            width: 45% !important; 
-            height: 85vh !important; 
+            width: 40% !important; 
+            height: 80vh !important; 
             margin: 0 !important;
-            border-radius: 20px !important;
+            border-radius: 15px !important;
             flex-shrink: 0 !important; 
             order: 2 !important; 
             align-self: center !important;
